@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Create Lambda function by using AWS SAM.
+Resources:
+  SamSampleLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: function/sam_sample/lambda_function.lambda_handler
+      Runtime: python3.6
+      Role: arn:aws:iam::XXXXXXXXXXXX:role/lambda_basic_execution
+      Environment:
+        Variables:
+          DYNAMODB_TABLE_NAME: !Ref SamSampleDynamoDB
+      Timeout: 30
+      Events:
+        samSampleApi:
+          Type: Api
+          Properties:
+            Path: /sample
+            Method: get
+  SamSampleDynamoDB:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
